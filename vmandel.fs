@@ -1,14 +1,8 @@
 
 \ ASCII mandelbrot based on a BASIC program
 \ then updated for RA8875
-\ I thik I can make this work mainly by changing .char, which outputs
-\ a single character based on the value on the stack.
-\ will also need to keep track of my horizontal and vertial position
-
-variable hpos
-variable vpos
-0 hpos !
-0 vpos !
+\ In ASCII version, .char outputs a single character. In video version,
+\ it draws a small colored block.
 
 100 constant hoffset
 0 constant voffset
@@ -27,6 +21,12 @@ variable cimag
 variable zreal
 variable zimag
 variable count
+
+variable hpos
+variable vpos
+0 hpos !
+0 vpos !
+
 
 : zr_sq zreal @ dup rescale */ ;
 : zi_sq zimag @ dup rescale */ ;
