@@ -1,8 +1,14 @@
 
 \ ASCII mandelbrot based on a BASIC program
 \ then updated for RA8875
-\ In ASCII version, .char outputs a single character. In video version,
-\ it draws a small colored block.
+\ I thik I can make this work mainly by changing .char, which outputs
+\ a single character based on the value on the stack.
+\ will also need to keep track of my horizontal and vertial position
+
+variable hpos
+variable vpos
+0 hpos !
+0 vpos !
 
 100 constant hoffset
 0 constant voffset
@@ -10,7 +16,6 @@
 5 constant vsize
 
 $fc40 constant orange
-$87e0 constant chartreuse
 
 20 constant maxiter
 -39 constant minval
@@ -23,24 +28,16 @@ variable zreal
 variable zimag
 variable count
 
-variable hpos
-variable vpos
-0 hpos !
-0 vpos !
-
-
 : zr_sq zreal @ dup rescale */ ;
 : zi_sq zimag @ dup rescale */ ;
 
 : tocolor
    dup 3 < if drop magenta else
    dup 6 < if drop red  else
-   dup 8 < if drop orange else
-   dup 10 < if drop yellow else
-   dup 12 < if drop chartreuse else
-   dup 14 < if drop green else
-   dup 16 < if drop cyan else
-   18 < if blue else
+   dup 9 < if drop orange else
+   dup 12 < if drop yellow else
+   dup 15 < if drop green else
+   18 < if cyan else
    black then then then then then then ;
 
 : .char dup 18 > if
