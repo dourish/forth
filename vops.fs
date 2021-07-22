@@ -81,8 +81,10 @@ $ffff constant white
    $b0 $90 v!                    \ start
    begin $90 v@ 128 and while repeat     \ loop until busy signal is clear
    
-   \ set text position
+   \ set text position registers
    0 $2a v! 0 $2b v! 0 $2c v! 0 $2d v!
+   \ reset FORTH's idea of the text position
+   0 $0a c!  0 $ab c!           \ setting VROW and VCOL
    
    \ restore background color
    \ $65 v! $ 64 v! $ 63 v!      ;
@@ -109,7 +111,11 @@ $ffff constant white
 
 : democircles
    12 0 do 20 0 do
-     i j + $2f j 3 * - j 2 * fgrgb
+     \ i j + $2f j 3 * - j 2 * fgrgb
+     $1f i 3 * - 0 max    \ red
+     j 4 *                \ green
+     i 10 - 0 max 3 *     \ blue
+     fgrgb
      i 40 * 20 +
      j 40 * 20 +
      18 fillcircle

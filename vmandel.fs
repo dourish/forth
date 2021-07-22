@@ -10,6 +10,7 @@
 5 constant vsize
 
 $fc40 constant orange
+$87e0 constant chartreuse
 
 20 constant maxiter
 -39 constant minval
@@ -34,10 +35,12 @@ variable vpos
 : tocolor
    dup 3 < if drop magenta else
    dup 6 < if drop red  else
-   dup 9 < if drop orange else
-   dup 12 < if drop yellow else
-   dup 15 < if drop green else
-   18 < if cyan else
+   dup 8 < if drop orange else
+   dup 10 < if drop yellow else
+   dup 12 < if drop chartreuse else
+   dup 14 < if drop green else
+   dup 16 < if drop cyan else
+   18 < if blue else
    black then then then then then then ;
 
 : .char dup 18 > if
