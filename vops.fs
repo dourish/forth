@@ -29,7 +29,8 @@ $ffff constant white
    dup $ff00 and 8 rshift $98 v! $00ff and $97 v!
    dup $ff00 and 8 rshift $96 v! $00ff and $95 v!
    dup $ff00 and 8 rshift $94 v! $00ff and $93 v!
-   dup $ff00 and 8 rshift $92 v! $00ff and $91 v! ;
+   dup $ff00 and 8 rshift $92 v! $00ff and $91 v!
+ ;
 
 : fillrect ( startx starty endx endy -- )
    setrect
@@ -37,7 +38,7 @@ $ffff constant white
    $10 $90 v!                    \ stop (necessary?)
    $b0 $90 v!                    \ start
    begin $90 v@ 128 and while repeat     \ loop until busy signal is clear
-  ;   
+ ;   
 
 : drawrect ( startx starty endx endy -- )
    setrect
@@ -45,7 +46,7 @@ $ffff constant white
    $10 $90 v!                    \ stop (necessary?)
    $90 $90 v!                    \ start
    begin $90 v@ 128 and while repeat     \ loop until busy signal is clear
-  ;   
+ ;   
 
 : drawline ( startx starty endx endy -- )
    setrect
@@ -53,19 +54,57 @@ $ffff constant white
    $10 $90 v!                    \ stop (necessary?)
    $80 $90 v!                    \ start
    begin $90 v@ 128 and while repeat     \ loop until busy signal is clear
-  ;
+ ;
 
-: fillcircle ( centerx centery radius -- )
+
+: setupcircle ( centerx centery radius -- )
    $9d v!                          \ set radius
    dup $ff00 and 8 rshift $9c v!   \ centery MSB
    $ff and $9b v!                  \ centery LSB
    dup $ff00 and 8 rshift $9a v!   \ centerx MSB
    $ff and $99 v!                  \ centerx LSB
+ ;    
+    
+: fillcircle ( centerx centery radius -- )
+   setupcircle
    $0 $90 v!
    $60 $90 v!
    begin $90 v@ 64 and while repeat     \ loop until busy signal is clear
-;    
-    
+ ;    
+
+: drawcircle ( centerx centery radius -- )
+   setupcircle
+   $0 $90 v!
+   $40 $90 v!
+   begin $90 v@ 64 and while repeat     \ loop until busy signal is clear
+ ;    
+
+: setuptriangle ( x1 y1 x2 y2 x3 y3 -- )
+   dup $ff00 and 8 rshift $98 v! $00ff and $97 v!
+   dup $ff00 and 8 rshift $96 v! $00ff and $95 v!
+   dup $ff00 and 8 rshift $94 v! $00ff and $93 v!
+   dup $ff00 and 8 rshift $92 v! $00ff and $91 v!
+   dup $ff00 and 8 rshift $ac v! $00ff and $ab v!
+   dup $ff00 and 8 rshift $aa v! $00ff and $a9 v!
+ ;   
+
+: filltriangle ( x1 y1 x2 y2 x3 y3 -- )
+   setuptriangle
+   \ draw with parameters
+   $11 $90 v!                    \ stop (necessary?)
+   $a1 $90 v!                    \ start
+   begin $90 v@ 128 and while repeat     \ loop until busy signal is clear
+ ;   
+
+: drawtriangle ( x1 y1 x2 y2 x3 y3 -- )
+   setuptriangle
+   \ draw with parameters
+   $11 $90 v!                    \ stop (necessary?)
+   $81 $90 v!                    \ start
+   begin $90 v@ 128 and while repeat     \ loop until busy signal is clear
+ ;   
+
+
 
 : page
    \ $63 v@ $64 v@ $65 v@         \ save foreground color
